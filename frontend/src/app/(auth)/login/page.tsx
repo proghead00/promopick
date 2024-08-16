@@ -24,6 +24,7 @@ const Login = () => {
             </label>
             <Input
               id="email"
+              name="email"
               type="email"
               placeholder="Enter your email"
               className="shadow-md border border-gray-300 rounded-lg w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-purple-500"
@@ -38,6 +39,7 @@ const Login = () => {
             </label>
             <Input
               id="password"
+              name="password"
               type="password"
               placeholder="Enter your password"
               className="shadow-md border border-gray-300 rounded-lg w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-purple-500"
@@ -46,7 +48,7 @@ const Login = () => {
           <div className="flex items-center justify-between">
             <button
               className="bg-purple-500 hover:bg-purple-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:ring-2 focus:ring-purple-500"
-              type="button"
+              type="submit"
             >
               Sign In
             </button>

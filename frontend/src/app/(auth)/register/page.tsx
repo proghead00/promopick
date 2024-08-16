@@ -1,6 +1,6 @@
 import React from "react";
 import Link from "next/link";
-import { Input } from "@/components/ui/input";
+import Register from "@/components/auth/Register";
 
 const RegisterPage = () => {
   return (
@@ -14,70 +14,7 @@ const RegisterPage = () => {
           <p className="text-gray-600">Choose your favourite promo!</p>
         </div>
 
-        <form className="space-y-6">
-          <div className="mb-4">
-            <label
-              className="block text-gray-700 text-sm font-medium mb-2"
-              htmlFor="username"
-            >
-              Username
-            </label>
-            <Input
-              id="username"
-              type="text"
-              placeholder="Enter your username"
-              className="w-full py-3 px-4 text-gray-700 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-purple-500 transition duration-300 ease-in-out"
-            />
-          </div>
-          <div className="mb-4">
-            <label
-              className="block text-gray-700 text-sm font-medium mb-2"
-              htmlFor="email"
-            >
-              Email
-            </label>
-            <Input
-              id="email"
-              type="email"
-              placeholder="Enter your email"
-              className="w-full py-3 px-4 text-gray-700 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-purple-500 transition duration-300 ease-in-out"
-            />
-          </div>
-          <div className="mb-6">
-            <label
-              className="block text-gray-700 text-sm font-medium mb-2"
-              htmlFor="password"
-            >
-              Password
-            </label>
-            <Input
-              id="password"
-              type="password"
-              placeholder="Enter your password"
-              className="w-full py-3 px-4 text-gray-700 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-purple-500 transition duration-300 ease-in-out"
-            />
-          </div>
-          <div className="mb-6">
-            <label
-              className="block text-gray-700 text-sm font-medium mb-2"
-              htmlFor="confirm_password"
-            >
-              Confirm Password
-            </label>
-            <Input
-              id="confirm_password"
-              type="password"
-              placeholder="Confirm your password"
-              className="w-full py-3 px-4 text-gray-700 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-purple-500 transition duration-300 ease-in-out"
-            />
-          </div>
-          <button
-            className="bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white font-bold py-3 px-6 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 transition duration-300 ease-in-out"
-            type="submit"
-          >
-            Register
-          </button>
-        </form>
+        <Register />
 
         <p className="text-center mt-4 text-gray-700">
           Already have an account?{" "}

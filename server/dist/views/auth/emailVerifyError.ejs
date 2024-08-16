@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <!-- <title>Welcome!</title> -->
+    <title>Verify URL is not correct</title>
     <style>
       body {
         margin: 0;
@@ -11,50 +11,40 @@
         font-family: Arial, sans-serif;
         background: linear-gradient(to right, #6a1b9a, #ec407a);
         color: #333;
+        height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
       }
+
       .container {
         max-width: 600px;
-        margin: 0 auto;
         background: #ffffff;
         border-radius: 8px;
         padding: 20px;
         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         text-align: center;
       }
+
       h1 {
-        font-size: 2.5em;
-        color: #fbc02d; /* Gradient color */
+        font-size: 2em;
+        color: #fbc02d;
         background: linear-gradient(to right, #fbc02d, #ff6f00);
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
       }
+
       p {
         color: #555;
       }
-      .button {
-        display: inline-block;
-        padding: 10px 20px;
-        margin: 20px 0;
-        color: #fff;
-        background: #6a1b9a;
-        border-radius: 5px;
-        text-decoration: none;
-        font-weight: bold;
-      }
-      .button:hover {
-        background: #4a148c;
-      }
     </style>
   </head>
+
   <body>
     <div class="container">
-      <h1>Welcome to PromoPick, <%= name %>!</h1>
-      <p>
-        Thank you for registering with us. We're excited to have you on board!
-      </p>
-      <p>To get started, click the button below:</p>
-      <p>If you have any questions, feel free to reply to this email.</p>
-      <p>Best regards,<br />The PromoPick Team</p>
+      <h1>Email verify URL is incorrect!</h1>
+      <p>Please make sure you didn't change anything in the URL.</p>
     </div>
   </body>
 </html>
