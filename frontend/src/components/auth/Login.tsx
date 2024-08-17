@@ -6,12 +6,14 @@ import { SubmitButton } from "../common/SubmitButton";
 import { useFormState } from "react-dom";
 import { loginAction } from "@/actions/authActions";
 import { toast } from "sonner";
+import { signIn } from "next-auth/react";
 
 const Login = () => {
   const initState = {
     status: 0,
     message: "",
     errors: {},
+    data: {},
   };
 
   const [state, formAction] = useFormState(loginAction, initState);
@@ -21,6 +23,12 @@ const Login = () => {
       toast.error(state.message);
     } else if (state.status === 200) {
       toast.success(state.message);
+      signIn("credentials", {
+        email: state.data?.email,
+        password: state.data?.password,
+        redirect: true,
+        callbackUrl: "/dashboard",
+      });
     }
   }, [state]);
 
