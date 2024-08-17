@@ -3,7 +3,7 @@
 import React, { useEffect } from "react";
 import { SubmitButton } from "../common/SubmitButton";
 import { Input } from "../ui/input";
-import { registerAction } from "@/app/authActions";
+import { registerAction } from "@/actions/authActions";
 import { useFormState } from "react-dom";
 import { toast } from "sonner";
 
