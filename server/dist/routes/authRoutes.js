@@ -8,8 +8,9 @@ import { v4 as uuidv4 } from "uuid";
 import { emailQueue, emailQueueName } from "../jobs/EmailJob.js";
 import jwt from "jsonwebtoken";
 import authMiddleware from "../middlewares/authMiddleware.js";
+import { authLimiter } from "../config/rateLimit.js";
 const router = Router();
-router.post("/register", async (req, res) => {
+router.post("/register", authLimiter, async (req, res) => {
     try {
         const body = req.body;
         const payload = registerSchema.parse(body);
@@ -57,7 +58,7 @@ router.post("/register", async (req, res) => {
             .json({ message: "Something went wrong, please try again" });
     }
 });
-router.post("/login", async (req, res) => {
+router.post("/login", authLimiter, async (req, res) => {
     try {
         const body = req.body;
         const payload = loginSchema.parse(body);
@@ -103,7 +104,7 @@ router.post("/login", async (req, res) => {
             .json({ message: "Something went wrong, please try again" });
     }
 });
-router.post("/check-credentials", async (req, res) => {
+router.post("/check-credentials", authLimiter, async (req, res) => {
     try {
         const body = req.body;
         const payload = loginSchema.parse(body);

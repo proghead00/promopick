@@ -6,6 +6,7 @@ import ejs from "ejs";
 import "./jobs/index.js";
 import { emailQueue, emailQueueName } from "./jobs/EmailJob.js";
 import Routes from "./routes/index.js";
+import { appLimiter } from "./config/rateLimit.js";
 
 const app: Application = express();
 
@@ -16,6 +17,8 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
+
+app.use(appLimiter);
 
 app.set("view engine", "ejs");
 app.set("views", path.resolve(__dirname, "views"));

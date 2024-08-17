@@ -8,10 +8,11 @@ import { v4 as uuidv4 } from "uuid";
 import { emailQueue, emailQueueName } from "../jobs/EmailJob.js";
 import jwt from "jsonwebtoken";
 import authMiddleware from "../middlewares/authMiddleware.js";
+import { authLimiter } from "../config/rateLimit.js";
 
 const router = Router();
 
-router.post("/register", async (req: Request, res: Response) => {
+router.post("/register", authLimiter, async (req: Request, res: Response) => {
   try {
     const body = req.body;
     const payload = registerSchema.parse(body);
@@ -66,7 +67,7 @@ router.post("/register", async (req: Request, res: Response) => {
   }
 });
 
-router.post("/login", async (req: Request, res: Response) => {
+router.post("/login", authLimiter, async (req: Request, res: Response) => {
   try {
     const body = req.body;
     const payload = loginSchema.parse(body);
@@ -120,48 +121,52 @@ router.post("/login", async (req: Request, res: Response) => {
   }
 });
 
-router.post("/check-credentials", async (req: Request, res: Response) => {
-  try {
-    const body = req.body;
-    const payload = loginSchema.parse(body);
+router.post(
+  "/check-credentials",
+  authLimiter,
+  async (req: Request, res: Response) => {
+    try {
+      const body = req.body;
+      const payload = loginSchema.parse(body);
 
-    let user = await prisma.user.findUnique({
-      where: { email: payload.email },
-    });
-
-    if (!user) {
-      return res.status(422).json({
-        errors: {
-          email: "No user found with this email",
-        },
+      let user = await prisma.user.findUnique({
+        where: { email: payload.email },
       });
-    }
 
-    const compare = await bcrypt.compare(payload.password, user.password);
+      if (!user) {
+        return res.status(422).json({
+          errors: {
+            email: "No user found with this email",
+          },
+        });
+      }
 
-    if (!compare) {
-      return res.status(422).json({
-        errors: {
-          email: "Invalid credentials",
-        },
+      const compare = await bcrypt.compare(payload.password, user.password);
+
+      if (!compare) {
+        return res.status(422).json({
+          errors: {
+            email: "Invalid credentials",
+          },
+        });
+      }
+
+      return res.json({
+        message: "Logged in succesfully",
+        data: {},
       });
-    }
+    } catch (err) {
+      if (err instanceof ZodError) {
+        const errors = formatError(err);
+        return res.status(422).json({ message: "Invalid data", errors });
+      }
 
-    return res.json({
-      message: "Logged in succesfully",
-      data: {},
-    });
-  } catch (err) {
-    if (err instanceof ZodError) {
-      const errors = formatError(err);
-      return res.status(422).json({ message: "Invalid data", errors });
+      return res
+        .status(500)
+        .json({ message: "Something went wrong, please try again" });
     }
-
-    return res
-      .status(500)
-      .json({ message: "Something went wrong, please try again" });
   }
-});
+);
 
 router.get("/user", authMiddleware, async (req: Request, res: Response) => {
   const user = req.user;

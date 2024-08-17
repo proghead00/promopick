@@ -7,6 +7,7 @@ import { useFormState } from "react-dom";
 import { loginAction } from "@/actions/authActions";
 import { toast } from "sonner";
 import { signIn } from "next-auth/react";
+import Link from "next/link";
 
 const Login = () => {
   const initState = {
@@ -69,12 +70,12 @@ const Login = () => {
         </div>
         <div className="flex items-center justify-between">
           <SubmitButton />
-          <a
-            className="inline-block align-baseline font-bold text-sm text-purple-500 hover:text-purple-700"
-            href="#"
+          <Link
+            href="/forgot-password"
+            className="font-bold text-sm text-purple-500 hover:text-purple-700"
           >
             Forgot Password?
-          </a>
+          </Link>
         </div>
       </form>
     </div>
