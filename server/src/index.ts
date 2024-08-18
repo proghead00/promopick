@@ -7,6 +7,7 @@ import "./jobs/index.js";
 import { emailQueue, emailQueueName } from "./jobs/EmailJob.js";
 import Routes from "./routes/index.js";
 import { appLimiter } from "./config/rateLimit.js";
+import fileUpload from "express-fileupload";
 
 const app: Application = express();
 
@@ -20,6 +21,14 @@ app.use(express.urlencoded({ extended: false }));
 
 app.use(appLimiter);
 
+app.use(
+  fileUpload({
+    useTempFiles: true,
+    tempFileDir: "/tmp/",
+  })
+);
+
+app.use(express.static("public")); // declaring the public folder to server images
 app.set("view engine", "ejs");
 app.set("views", path.resolve(__dirname, "views"));
 

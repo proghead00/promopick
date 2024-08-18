@@ -38,9 +38,7 @@ const ForgotPassword = () => {
           <span className="text-red-500">{state.errors?.email}</span>
         </div>
 
-        <div className="flex items-center justify-between">
-          <SubmitButton />
-        </div>
+        <SubmitButton />
       </form>
     </div>
   );
