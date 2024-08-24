@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { Dispatch, SetStateAction, useState } from "react";
 import {
   Dialog,
   DialogContent,
@@ -27,10 +27,24 @@ import { CustomUser } from "@/app/api/auth/[...nextauth]/options";
 import { toast } from "sonner";
 import { clearCache } from "@/actions/commonActions";
 
-export const AddPromo = ({ user }: { user: CustomUser }) => {
-  const [open, setOpen] = useState(false);
-  const [promopickData, setPromopickData] = useState<PromopickFormType>({});
-  const [date, setDate] = React.useState<Date | null>();
+export const EditPromo = ({
+  token,
+  promo,
+  open,
+  setOpen,
+}: {
+  token: string;
+  promo: PromoType;
+  open: boolean;
+  setOpen: Dispatch<SetStateAction<boolean>>;
+}) => {
+  const [promopickData, setPromopickData] = useState<PromopickFormType>({
+    title: promo.title,
+    description: promo.description,
+  });
+  const [date, setDate] = React.useState<Date | null>(
+    new Date(promo.expire_at)
+  );
   const [image, setImage] = useState<File | null>(null);
   const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState<PromopickTypeError>({});
@@ -56,9 +70,9 @@ export const AddPromo = ({ user }: { user: CustomUser }) => {
       if (image) {
         formData.append("image", image);
       }
-      const { data } = await axios.post(PROMO_URL, formData, {
+      const { data } = await axios.put(`${PROMO_URL}/${promo.id}`, formData, {
         headers: {
-          Authorization: user.token,
+          Authorization: token,
         },
       });
 
@@ -69,7 +83,7 @@ export const AddPromo = ({ user }: { user: CustomUser }) => {
         setDate(null);
         setImage(null);
         setErrors({});
-        toast.success("Promo added succesfully!");
+        toast.success(data?.message);
         setOpen(false);
       }
     } catch (err) {
@@ -195,7 +209,7 @@ export const AddPromo = ({ user }: { user: CustomUser }) => {
                 <Calendar
                   mode="single"
                   selected={date ?? new Date()}
-                  onSelect={setDate}
+                  onSelect={(date) => setDate(date!)}
                   initialFocus
                 />
               </PopoverContent>

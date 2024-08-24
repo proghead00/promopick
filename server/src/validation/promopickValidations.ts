@@ -10,6 +10,6 @@ export const promopickSchema = z.object({
     .max(500, { message: "Description length must be below 500 characters" }),
   expire_at: z
     .string({ message: "Expire at is required." })
-    .min(5, { message: "Please pass correct date" }),
+    .min(5, { message: "Please pick correct date" }),
   image: z.string().optional(),
 });
