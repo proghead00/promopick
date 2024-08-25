@@ -1,8 +1,15 @@
 import React from "react";
 import Link from "next/link";
 import Login from "@/components/auth/Login";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/app/api/auth/[...nextauth]/options";
+import { redirect } from "next/navigation";
 
-const LoginPage = () => {
+const LoginPage = async () => {
+  const session = await getServerSession(authOptions);
+  if (session) {
+    redirect("/dashboard");
+  }
   return (
     <div className="flex justify-center items-center h-screen bg-gradient-to-r from-purple-700 to-pink-600">
       <div className="w-full md:w-[550px] shadow-lg rounded-xl py-5 px-10 bg-white">

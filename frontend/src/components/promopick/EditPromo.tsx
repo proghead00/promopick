@@ -111,7 +111,7 @@ export const EditPromo = ({
       >
         <DialogHeader className="flex justify-center items-center mb-4">
           <DialogTitle className="text-3xl font-extrabold bg-gradient-to-r from-yellow-400 to-orange-500 text-transparent bg-clip-text">
-            Create Promo
+            Edit Promo
           </DialogTitle>
 
           <DialogClose asChild>

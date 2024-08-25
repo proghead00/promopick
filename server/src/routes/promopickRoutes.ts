@@ -58,6 +58,9 @@ router.get("/", async (req: Request, res: Response) => {
   try {
     const promo = await prisma.promopick.findMany({
       where: { user_id: req.user?.id },
+      orderBy: {
+        id: "desc",
+      },
     });
 
     return res.json({ message: "Promo fetched succesfully!", data: promo });
@@ -197,5 +200,8 @@ router.delete("/:id", async (req: Request, res: Response) => {
       .json({ message: "Something went wrong, please try again" });
   }
 });
+
+// Promo Items
+router.post("/items", async (req: Request, res: Response) => {});
 
 export default router;

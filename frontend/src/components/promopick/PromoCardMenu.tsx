@@ -10,6 +10,7 @@ import {
 import { EllipsisVertical } from "lucide-react";
 import dynamic from "next/dynamic";
 import { EditPromo } from "./EditPromo";
+import { DeletePromo } from "./DeletePromo";
 
 // const EditPromo = dynamic(() => import("./EditPromo"));
 
@@ -21,11 +22,21 @@ export const PromoCardMenu = ({
   token: string;
 }) => {
   const [open, setOpen] = useState(false);
+  const [deleteOpen, setDeleteOpen] = useState(false);
 
   return (
     <>
       {open && (
         <EditPromo open={open} setOpen={setOpen} promo={promo} token={token} />
+      )}
+
+      {deleteOpen && (
+        <DeletePromo
+          open={deleteOpen}
+          setOpen={setDeleteOpen}
+          id={promo.id}
+          token={token}
+        />
       )}
 
       <DropdownMenu>
@@ -38,7 +49,9 @@ export const PromoCardMenu = ({
             Edit
           </DropdownMenuItem>
           <DropdownMenuItem>Copy Link</DropdownMenuItem>
-          <DropdownMenuItem>Delete</DropdownMenuItem>
+          <DropdownMenuItem onClick={() => setDeleteOpen(true)}>
+            Delete
+          </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
     </>

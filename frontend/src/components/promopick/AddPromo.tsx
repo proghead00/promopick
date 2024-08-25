@@ -163,7 +163,7 @@ export const AddPromo = ({ user }: { user: CustomUser }) => {
             <Input
               onChange={handleImageChange}
               id="image"
-              //   accept="image/*"
+              accept="image/*"
               type="file"
               placeholder="Upload image"
               className="w-full py-3 px-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 bg-gray-100 text-gray-900"

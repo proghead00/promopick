@@ -21,12 +21,31 @@ model User {
 }
 
 model Promopick {
-  id          Int      @id @default(autoincrement())
-  user        User     @relation(fields: [user_id], references: [id], onDelete: Cascade)
-  user_id     Int
-  title       String
-  description String
-  image       String
-  expire_at   DateTime
-  created_at  DateTime @default(now())
+  id            Int             @id @default(autoincrement())
+  user          User            @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  user_id       Int
+  title         String
+  description   String
+  image         String
+  expire_at     DateTime
+  created_at    DateTime        @default(now())
+  PromoItem     PromoItem[]
+  PromoComments PromoComments[]
+}
+
+model PromoItem {
+  id         Int       @id @default(autoincrement())
+  promo      Promopick @relation(fields: [promo_id], references: [id], onDelete: Cascade)
+  promo_id   Int
+  image      String
+  count      Int       @default(0)
+  created_at DateTime  @default(now())
+}
+
+model PromoComments {
+  id         Int       @id @default(autoincrement())
+  promo      Promopick @relation(fields: [promo_id], references: [id], onDelete: Cascade)
+  promo_id   Int
+  comment    String
+  created_at DateTime  @default(now())
 }
