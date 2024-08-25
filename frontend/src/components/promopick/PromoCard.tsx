@@ -12,6 +12,7 @@ import Image from "next/image";
 import { getImageUrl } from "@/lib/utils";
 import { Button } from "../ui/button";
 import { PromoCardMenu } from "./PromoCardMenu";
+import Link from "next/link";
 
 export const PromoCard = ({
   promo,
@@ -47,7 +48,9 @@ export const PromoCard = ({
         </p>
       </CardContent>
       <CardFooter>
-        <Button>Item</Button>
+        <Link href={`/promo/items/${promo.id}`}>
+          <Button>Item</Button>
+        </Link>
       </CardFooter>
     </Card>
   );

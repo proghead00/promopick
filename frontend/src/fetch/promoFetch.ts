@@ -23,3 +23,22 @@ export async function fetchPromos(token: string) {
 
   return [];
 }
+
+// this is to make promos available for public view
+export async function fetchSinglePromo(id: number) {
+  const res = await fetch(`${PROMO_URL}/${id}`, {
+    cache: "no-cache",
+  });
+
+  if (!res.ok) {
+    throw new Error("Failed to fetch");
+  }
+
+  const response = await res.json();
+
+  if (response?.data) {
+    return response?.data;
+  }
+
+  return null;
+}

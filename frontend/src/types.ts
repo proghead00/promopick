@@ -19,3 +19,7 @@ type PromoType = {
   created_at: string;
   expire_at: string;
 };
+
+type PromopickItemForm = {
+  image: File | null;
+};

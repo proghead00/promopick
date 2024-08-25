@@ -3,7 +3,7 @@ import { AddPromo } from "@/components/promopick/AddPromo";
 import React from "react";
 import { authOptions, CustomSession } from "../api/auth/[...nextauth]/options";
 import { getServerSession } from "next-auth";
-import { fetchPromos } from "../fetch/promoFetch";
+import { fetchPromos } from "../../fetch/promoFetch";
 import { PromoCard } from "@/components/promopick/PromoCard";
 
 const DashboardPage = async () => {

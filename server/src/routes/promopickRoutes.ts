@@ -9,10 +9,11 @@ import {
 import { promopickSchema } from "../validation/promopickValidations.js";
 import { UploadedFile } from "express-fileupload";
 import prisma from "../config/database.js";
+import authMiddleware from "../middlewares/authMiddleware.js";
 
 const router = Router();
 
-router.post("/", async (req: Request, res: Response) => {
+router.post("/", authMiddleware, async (req: Request, res: Response) => {
   try {
     const body = req.body;
     const payload = promopickSchema.parse(body);
@@ -100,7 +101,7 @@ router.get("/:id", async (req: Request, res: Response) => {
   }
 });
 
-router.put("/:id", async (req: Request, res: Response) => {
+router.put("/:id", authMiddleware, async (req: Request, res: Response) => {
   try {
     const { id } = req.params;
     const body = req.body;
@@ -153,7 +154,7 @@ router.put("/:id", async (req: Request, res: Response) => {
   }
 });
 
-router.delete("/:id", async (req: Request, res: Response) => {
+router.delete("/:id", authMiddleware, async (req: Request, res: Response) => {
   try {
     const { id } = req.params;
 
@@ -202,6 +203,10 @@ router.delete("/:id", async (req: Request, res: Response) => {
 });
 
 // Promo Items
-router.post("/items", async (req: Request, res: Response) => {});
+router.post(
+  "/items",
+  authMiddleware,
+  async (req: Request, res: Response) => {}
+);
 
 export default router;

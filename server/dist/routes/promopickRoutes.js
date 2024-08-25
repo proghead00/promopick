@@ -3,8 +3,9 @@ import { ZodError } from "zod";
 import { formatError, imageValidator, removeImage, uploadFile, } from "../helper.js";
 import { promopickSchema } from "../validation/promopickValidations.js";
 import prisma from "../config/database.js";
+import authMiddleware from "../middlewares/authMiddleware.js";
 const router = Router();
-router.post("/", async (req, res) => {
+router.post("/", authMiddleware, async (req, res) => {
     try {
         const body = req.body;
         const payload = promopickSchema.parse(body);
@@ -83,7 +84,7 @@ router.get("/:id", async (req, res) => {
             .json({ message: "Something went wrong, please try again" });
     }
 });
-router.put("/:id", async (req, res) => {
+router.put("/:id", authMiddleware, async (req, res) => {
     try {
         const { id } = req.params;
         const body = req.body;
@@ -128,7 +129,7 @@ router.put("/:id", async (req, res) => {
             .json({ message: "Something went wrong, please try again" });
     }
 });
-router.delete("/:id", async (req, res) => {
+router.delete("/:id", authMiddleware, async (req, res) => {
     try {
         const { id } = req.params;
         // get old img name
@@ -170,5 +171,5 @@ router.delete("/:id", async (req, res) => {
     }
 });
 // Promo Items
-router.post("/items", async (req, res) => { });
+router.post("/items", authMiddleware, async (req, res) => { });
 export default router;

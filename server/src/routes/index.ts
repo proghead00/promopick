@@ -11,5 +11,5 @@ router.use("/api/auth", AuthRoutes);
 router.use("/api/auth", PasswordRoutes);
 router.use("/", VerifyRoutes);
 
-router.use("/api/promopick", authMiddleware, PromoPick);
+router.use("/api/promopick", PromoPick);
 export default router;
