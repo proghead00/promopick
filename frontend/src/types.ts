@@ -18,8 +18,23 @@ type PromoType = {
   image: string;
   created_at: string;
   expire_at: string;
+
+  PromoItem: Array<PromoItem>;
+  PromoComments: Array<PromoComment>;
 };
 
 type PromopickItemForm = {
   image: File | null;
+};
+
+type PromoItem = {
+  id: number;
+  count: number;
+  image: string;
+};
+
+type PromoComment = {
+  id: number;
+  comment: string;
+  created_at: string;
 };

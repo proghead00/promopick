@@ -7,7 +7,7 @@ import {
   uploadFile,
 } from "../helper.js";
 import { promopickSchema } from "../validation/promopickValidations.js";
-import { UploadedFile } from "express-fileupload";
+import { FileArray, UploadedFile } from "express-fileupload";
 import prisma from "../config/database.js";
 import authMiddleware from "../middlewares/authMiddleware.js";
 
@@ -82,6 +82,25 @@ router.get("/:id", async (req: Request, res: Response) => {
     const { id } = req.params;
     const promo = await prisma.promopick.findUnique({
       where: { id: Number(id) },
+      include: {
+        PromoItem: {
+          select: {
+            image: true,
+            id: true,
+            count: true,
+          },
+        },
+        PromoComments: {
+          select: {
+            id: true,
+            comment: true,
+            created_at: true,
+          },
+          orderBy: {
+            id: "desc",
+          },
+        },
+      },
       //   select: {
       //     id: true,
       //     title: true,
@@ -203,10 +222,48 @@ router.delete("/:id", authMiddleware, async (req: Request, res: Response) => {
 });
 
 // Promo Items
-router.post(
-  "/items",
-  authMiddleware,
-  async (req: Request, res: Response) => {}
-);
+router.post("/items", authMiddleware, async (req: Request, res: Response) => {
+  const { id } = req.body;
+
+  const files: FileArray | null | undefined = req.files;
+
+  let imgErrors: Array<string> = [];
+
+  const images = files?.["images[]"] as UploadedFile[];
+
+  if (images.length >= 2) {
+    images.map((img) => {
+      const validMsg = imageValidator(img?.size, img?.mimetype);
+
+      if (validMsg) {
+        imgErrors.push(validMsg);
+      }
+    });
+
+    if (imgErrors.length) {
+      return res.status(422).json({ erros: imgErrors });
+    }
+
+    // Upload imgs to items
+    let uploadedImages: string[] = [];
+    images.map((img) => {
+      uploadedImages.push(uploadFile(img));
+    });
+
+    // save to db
+    uploadedImages.map(async (item) => {
+      await prisma.promoItem.create({
+        data: {
+          image: item,
+          promo_id: Number(id),
+        },
+      });
+    });
+
+    return res.json({ message: "Promo items uploaded succesfully" });
+  }
+
+  return res.status(422).json({ errors: ["Please select at least 2 images"] });
+});
 
 export default router;

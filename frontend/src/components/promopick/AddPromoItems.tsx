@@ -4,6 +4,10 @@ import { Upload } from "lucide-react";
 import React, { ChangeEvent, useRef, useState } from "react";
 import { Button } from "../ui/button";
 import Image from "next/image";
+import { PROMO_ITEMS_URL } from "@/lib/apiEndpoints";
+import axios, { AxiosError } from "axios";
+import { toast } from "sonner";
+import { useRouter } from "next/navigation";
 
 export const AddPromoItems = ({
   token,
@@ -12,6 +16,8 @@ export const AddPromoItems = ({
   token: string;
   promoId: number;
 }) => {
+  const router = useRouter();
+
   const [items, setItems] = useState<Array<PromopickItemForm>>([
     {
       image: null,
@@ -22,6 +28,7 @@ export const AddPromoItems = ({
   ]);
 
   const [urls, setUrls] = useState(["", ""]);
+  const [loading, setLoading] = useState(false);
 
   const imgRef1 = useRef<HTMLInputElement | null>(null);
   const imgRef2 = useRef<HTMLInputElement | null>(null);
@@ -41,6 +48,53 @@ export const AddPromoItems = ({
       const updatedUrls = [...urls];
       updatedUrls[index] = imageUrl;
       setUrls(updatedUrls);
+    }
+  };
+
+  const handleSubmit = async () => {
+    try {
+      const formData = new FormData();
+      formData.append("id", promoId.toString());
+
+      items.map((item) => {
+        if (item.image) {
+          formData.append(`images[]`, item.image);
+        }
+      });
+
+      if (formData.get("images[]")) {
+        setLoading(true);
+
+        const { data } = await axios.post(`${PROMO_ITEMS_URL}`, formData, {
+          headers: {
+            Authorization: token,
+          },
+        });
+
+        if (data?.message) {
+          toast.success(data?.message);
+          setTimeout(() => {
+            router.push("/dashboard");
+          }, 1000);
+        }
+
+        setLoading(false);
+      } else {
+        toast.warning("Please upload both the images");
+      }
+    } catch (err) {
+      setLoading(false);
+      if (err instanceof AxiosError) {
+        if (err.response?.status === 422) {
+          if (err?.response?.data?.errors) {
+            err?.response?.data?.errors?.map((error: string) => {
+              toast.error(error);
+            });
+          }
+        }
+      } else {
+        toast.error("Something went wrong, please try again");
+      }
     }
   };
 
@@ -116,7 +170,9 @@ export const AddPromoItems = ({
       </div>
 
       <div className="text-center mt-12">
-        <Button className="w-52">Submit</Button>
+        <Button onClick={handleSubmit} disabled={loading} className="w-52">
+          {loading ? "Processing..." : "Submit"}
+        </Button>
       </div>
     </div>
   );

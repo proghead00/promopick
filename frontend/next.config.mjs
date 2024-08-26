@@ -17,6 +17,8 @@ const nextConfig = {
       },
     ],
   },
+
+  reactStrictMode: false, // else, it renders twice in dev mode and count via socket would be increased once more
 };
 
 export default nextConfig;

@@ -9,7 +9,10 @@ import Routes from "./routes/index.js";
 import { appLimiter } from "./config/rateLimit.js";
 import fileUpload from "express-fileupload";
 import cors from "cors";
-
+import { Server } from "socket.io";
+import { createServer, Server as HttpServer } from "http";
+import { setupSocket } from "./socket.js";
+import helmet from "helmet";
 const app: Application = express();
 
 const PORT = process.env.PORT || 7000;
@@ -17,7 +20,18 @@ const PORT = process.env.PORT || 7000;
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 // console.log("DIRNAME HERE ", __dirname);
 
+const server: HttpServer = createServer(app);
+const io = new Server(server, {
+  cors: {
+    origin: process.env.CLIENT_URL,
+  },
+});
+
+export { io };
+setupSocket(io);
+
 app.use(express.json());
+app.use(helmet());
 app.use(cors());
 app.use(express.urlencoded({ extended: false }));
 
@@ -51,6 +65,6 @@ app.get("/", async (req: Request, res: Response) => {
   // return res.render("emails/welcome", { name: "Susnata" });
 });
 
-app.listen(PORT, () => {
+server.listen(PORT, () => {
   console.log(`Running on PORT ${PORT}`);
 });

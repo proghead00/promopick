@@ -67,6 +67,25 @@ router.get("/:id", async (req, res) => {
         const { id } = req.params;
         const promo = await prisma.promopick.findUnique({
             where: { id: Number(id) },
+            include: {
+                PromoItem: {
+                    select: {
+                        image: true,
+                        id: true,
+                        count: true,
+                    },
+                },
+                PromoComments: {
+                    select: {
+                        id: true,
+                        comment: true,
+                        created_at: true,
+                    },
+                    orderBy: {
+                        id: "desc",
+                    },
+                },
+            },
             //   select: {
             //     id: true,
             //     title: true,
@@ -171,5 +190,37 @@ router.delete("/:id", authMiddleware, async (req, res) => {
     }
 });
 // Promo Items
-router.post("/items", authMiddleware, async (req, res) => { });
+router.post("/items", authMiddleware, async (req, res) => {
+    const { id } = req.body;
+    const files = req.files;
+    let imgErrors = [];
+    const images = files?.["images[]"];
+    if (images.length >= 2) {
+        images.map((img) => {
+            const validMsg = imageValidator(img?.size, img?.mimetype);
+            if (validMsg) {
+                imgErrors.push(validMsg);
+            }
+        });
+        if (imgErrors.length) {
+            return res.status(422).json({ erros: imgErrors });
+        }
+        // Upload imgs to items
+        let uploadedImages = [];
+        images.map((img) => {
+            uploadedImages.push(uploadFile(img));
+        });
+        // save to db
+        uploadedImages.map(async (item) => {
+            await prisma.promoItem.create({
+                data: {
+                    image: item,
+                    promo_id: Number(id),
+                },
+            });
+        });
+        return res.json({ message: "Promo items uploaded succesfully" });
+    }
+    return res.status(422).json({ errors: ["Please select at least 2 images"] });
+});
 export default router;

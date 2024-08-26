@@ -9,3 +9,4 @@ export const RESET_PASSWORD_URL = `${BASE_URL}/auth/reset-password`;
 
 // Promopick route
 export const PROMO_URL = `${BASE_URL}/promopick`;
+export const PROMO_ITEMS_URL = `${BASE_URL}/promopick/items`;
