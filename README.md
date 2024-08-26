@@ -22,3 +22,4 @@
 - Prevent voting anonymously from same browser, by storing state in localstorage
 - Link preview support
 - My Profile section
+- Deployment
